@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Spring Boot 기본 logback 설정 include -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- 로그 파일 저장 경로 (property로 지정해두면 재사용 가능) -->
+    <property name="log_dir" value="/data/log/SpringBootMyBatis"/>
+
+    <!-- 파일에 로그를 남기는 appender -->
+    <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/applog.log</file>
+
+        <!-- 로그 출력 포맷 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%level] %logger{36} - %msg%n
+            </Pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <!-- 로그 파일 롤링 정책 (하루 단위, 최대 30일 보관) -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_dir}/applog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- root logger: 전체 로그 레벨은 INFO, 기본 출력은 콘솔 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- 특정 패키지(kopo.poly)에 대해 별도로 로그 설정 -->
+    <logger name="kopo.poly" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="File"/>
+    </logger>
+
+</configuration>
