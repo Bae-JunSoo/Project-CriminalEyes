@@ -1,104 +1,85 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>로그인하기</title>
-    <link rel="stylesheet" href="/css/table.css">
+    <title>로그인 | CriminalEyes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-
-        // HTML 로딩이 완료되고, 실행됨
         $(document).ready(function () {
-
             // 회원가입
-            $("#btnUserReg").on("click", function () { // 버튼 클릭했을 때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+            $("#btnUserReg").on("click", function () {
                 location.href = "/user/userRegForm";
             });
 
             // 아이디 찾기
-            $("#btnSearchUserId").on("click", function () { // 버튼 클릭했을 때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+            $("#btnSearchUserId").on("click", function () {
                 location.href = "/user/searchUserId";
             });
 
             // 비밀번호 찾기
-            $("#btnSearchPassword").on("click", function () { // 버튼 클릭했을 때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+            $("#btnSearchPassword").on("click", function () {
                 location.href = "/user/searchPassword";
             });
 
-            //로그인
+            // 로그인
             $("#btnLogin").on("click", function () {
-                let f = document.getElementById("f"); //form 태그
+                let f = document.getElementById("f");
 
                 if (f.userId.value === "") {
                     alert("아이디를 입력하세요.");
                     f.userId.focus();
                     return;
                 }
-
                 if (f.password.value === "") {
                     alert("비밀번호를 입력하세요.");
                     f.password.focus();
                     return;
                 }
 
-                // Ajax 호출해서 로그인하기
                 $.ajax({
-                    url: "/user/LoginProc",
-                    type: "post", // 전송방식은 Post
-                    dataType: "JSON", // 값을 결과는 JSON으로 받기
-                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                    success: function (json) { // /notice/noticeUpdate 호출이 성공되었다면..
-
-                        if (json.result === 1) { // 로그인 성공
-                            alert(json.msg); // 메세지 띄우기
-                            location.href = "/user/loginResult"; // 로그인 성공 페이지 이동
-
-                        } else { // 로그인 실패
-                            alert(json.msg); // 메세지 띄우기
-                            $("#userId").focus(); // 아이디 입력 항목에 마우스 커서 이동
+                    url: "/user/loginProc",  // 보통 loginProc 소문자로 사용
+                    type: "post",
+                    dataType: "JSON",
+                    data: $("#f").serialize(),
+                    success: function (json) {
+                        alert(json.msg);
+                        if (json.result === 1) {
+                            // 로그인 성공 → 메인 페이지 이동
+                            location.href = "/";
+                        } else {
+                            // 로그인 실패
+                            $("#userId").focus();
                         }
                     }
-                }
-                )
-            })
-
-        })
-
+                });
+            });
+        });
     </script>
 </head>
 
-<body>
-<h2>로그인하기</h2>
-<hr/>
-<br/>
-<form id="f">
-    <div class="divTable minimalistBlack">
-        <div class="divTableBody">
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
 
-            <div class="divTableRow">
-                <div class="divTableCell">아이디</div>
-                <div class="divTableCell">
-                    <input type="text" name="userId" id="userId" />
-                </div>
-            </div>
-
-            <div class="divTableRow">
-                <div class="divTableCell">비밀번호</div>
-                <div class="divTableCell">
-                    <input type="password" name="password" id="password" />
-                </div>
-            </div>
-
+<div class="card shadow-sm p-4 rounded-4" style="width: 400px;">
+    <h2 class="text-center fw-bold mb-4">로그인</h2>
+    <form id="f">
+        <div class="mb-3">
+            <label class="form-label">아이디</label>
+            <input type="text" name="userId" id="userId" class="form-control" placeholder="아이디 입력">
         </div>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">비밀번호</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="비밀번호 입력">
+        </div>
+        <button id="btnLogin" type="button" class="btn btn-primary w-100 mb-3">로그인</button>
+        <div class="d-flex justify-content-between">
+            <button id="btnUserReg" type="button" class="btn btn-outline-secondary btn-sm">회원가입</button>
+            <button id="btnSearchUserId" type="button" class="btn btn-outline-secondary btn-sm">아이디 찾기</button>
+            <button id="btnSearchPassword" type="button" class="btn btn-outline-secondary btn-sm">비밀번호 찾기</button>
+        </div>
+    </form>
+</div>
 
-    <div>
-        <button id="btnLogin" type="button">로그인</button>
-        <button id="btnUserReg" type="button">회원가입</button>
-        <button id="btnSearchUserId" type="button">아이디 찾기</button>
-        <button id="btnSearchPassword" type="button">비밀번호 찾기</button>
-    </div>
-</form>
 </body>
 </html>
