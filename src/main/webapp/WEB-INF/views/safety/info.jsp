@@ -45,7 +45,7 @@
 </footer>
 
 <!-- Kakao Map API -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=992d0fb37a356d0efb02ee5300812c81"></script>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=84a966ed78c5ee7334ec7decce7e8358&libraries=services"></script>
 <script>
     var mapContainer = document.getElementById('map');
     var mapOption = {
