@@ -1,7 +1,9 @@
 package com.kopo.criminaleyes.controller;
 
 import com.kopo.criminaleyes.dto.MailDTO;
+import com.kopo.criminaleyes.dto.MailInfoDTO;
 import com.kopo.criminaleyes.dto.MsgDTO;
+import com.kopo.criminaleyes.service.IMailListService;
 import com.kopo.criminaleyes.service.IMailService;
 import com.kopo.criminaleyes.service.impl.MailService;
 import com.kopo.criminaleyes.util.CmmUtil;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MailController {
 
     private final IMailService mailService; // 메일 발송을 위한 서비스 객체를 사용하기 a
-
+    private final IMailListService  mailListService;
     /**
      * 메일 발송하기폼
      */
@@ -37,7 +39,7 @@ public class MailController {
 
     @ResponseBody
     @PostMapping(value = "sendMail")
-    public MsgDTO sendMail(HttpServletRequest request) {
+    public MsgDTO sendMail(HttpServletRequest request) throws Exception {
 
         // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
         log.info("{}.sendMail Start!", this.getClass().getName());
@@ -64,10 +66,20 @@ public class MailController {
         pDTO.setTitle(title); // 제목을 DTO 저장
         pDTO.setContents(contents); // 내용을 DTO 저장
 
+
         //메일발송하기
         int res = mailService.doSendMail(pDTO);
 
         if (res == 1) { //메일발송 성공
+
+            MailInfoDTO lDTO = new MailInfoDTO();
+
+            lDTO.setRecipientEmail(toMail);
+            lDTO.setSubject(title);
+            lDTO.setContent(contents);
+
+            mailListService.insertMailList(lDTO);
+
             msg = "메일 발송하였습니다.";
 
         } else { //메일발송 실패

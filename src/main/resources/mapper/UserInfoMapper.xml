@@ -78,5 +78,16 @@
         WHERE USER_ID = #{userId}
     </update>
 
+    <select id="getUserInfo" parameterType="UserinfoDTO" resultType="UserinfoDTO">
+        SELECT USER_ID,
+               USER_NAME,
+               EMAIL,
+               ADDR1,
+               ADDR2,
+               REG_DT
+        FROM USER_INFO
+        WHERE USER_ID = #{userId}
+    </select>
+
 
 </mapper>

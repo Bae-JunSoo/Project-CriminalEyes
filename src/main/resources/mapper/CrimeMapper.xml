@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kopo.criminaleyes.mapper.CrimeMapper">
+
+    <select id="getAllCrimes" resultType="com.kopo.criminaleyes.dto.CrimeDTO">
+        SELECT
+            crime_id AS crimeId,
+            crime_type AS crimeType,
+            lat,
+            lng,
+            region,
+            description,
+            occurred_at AS occurredAt
+        FROM crime_info;
+    </select>
+
+    <insert id="insertCrime" parameterType="com.kopo.criminaleyes.dto.CrimeDTO">
+        INSERT INTO crime_info (crime_type, lat, lng, region, description)
+        VALUES (#{crimeType}, #{lat}, #{lng}, #{region}, #{description});
+    </insert>
+
+</mapper>

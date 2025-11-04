@@ -8,4 +8,9 @@ import java.util.List;
 public interface IMailListService {
 
     List<MailInfoDTO> getMailList() throws Exception;
+
+    void insertMailList(MailInfoDTO pDTO) throws Exception;
+
+    MailInfoDTO selectMailList(MailInfoDTO pDTO) throws Exception;
+
 }

@@ -10,4 +10,15 @@
         ORDER BY mail_id desc
     </select>
 
+    <insert id="insertMailList" parameterType="MailInfoDTO">
+        INSERT INTO MAIL_INFO (recipient_email, subject, content, sent_at)
+        VALUES (#{recipientEmail}, #{subject}, #{content}, NOW())
+    </insert>
+
+    <select id="selectMailList" resultType="MailInfoDTO" parameterType="MailInfoDTO">
+        SELECT mail_id, recipient_email, subject, content, sent_at
+        from MAIL_INFO
+        WHERE mail_id = #{mailId}
+    </select>
+
 </mapper>

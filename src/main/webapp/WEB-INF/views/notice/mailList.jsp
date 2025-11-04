@@ -5,7 +5,7 @@
 <%@ page import="com.kopo.criminaleyes.util.CmmUtil" %>
 
 <%@ page import="com.kopo.criminaleyes.dto.MailInfoDTO" %>
-<%@ page import="com.kopo.criminaleyes.dto.NoticeDTO" %>
+
 <%
     // NoticeController 함수에서 model 객체에 저장된 값 불러오기
     List<MailInfoDTO> rList = (List<MailInfoDTO>) request.getAttribute("rList");
@@ -20,7 +20,7 @@
 
         //상세보기 이동
         function doDetail(seq) {
-            location.href = "/notice/noticeInfo?nSeq=" + seq;
+            location.href = "/mailinfo/mailInfo?nSeq=" + seq;
         }
 
     </script>

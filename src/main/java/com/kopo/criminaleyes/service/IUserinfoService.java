@@ -21,4 +21,6 @@ public interface IUserinfoService {
 
     // 비밀번호 재설정
     int newPasswordProc(UserinfoDTO pDTO) throws Exception;
+
+    UserinfoDTO getUserInfo(UserinfoDTO pDTO) throws Exception;
 }

@@ -123,7 +123,9 @@
                 alert("이메일을 입력하세요.");
                 return;
             }
-            if (f.authNumber.value === "" || f.authNumber.value !== emailAuthNumber) {
+            if (f.authNumber.value === "" || f.authNumber.value !== emailAuthNumber + '') {
+                console.log(f.authNumber.value)
+                console.log(emailAuthNumber)
                 alert("이메일 인증번호가 일치하지 않습니다.");
                 return;
             }
@@ -179,7 +181,7 @@
             <label class="form-label">이메일</label>
             <div class="input-group">
                 <input type="email" name="email" class="form-control" placeholder="이메일 입력">
-                <button id="btnEmail" type="button" class="btn btn-outline-secondary">중복체크</button>
+                <button id="btnEmail" type="button" class="btn btn-outline-secondary">인증번호</button>
             </div>
             <input type="text" name="authNumber" class="form-control mt-2" placeholder="메일 인증번호 입력">
         </div>

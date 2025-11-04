@@ -20,7 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import org.springframework.ui.Model;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -240,7 +244,7 @@ public class UserinfoController {
         try {
 
             String userId = CmmUtil.nvl(request.getParameter("userId")); //아이디
-            String password = CmmUtil.nvl(request.getParameter("passwoed")); //비밀번호
+            String password = CmmUtil.nvl(request.getParameter("password")); //비밀번호
 
             log.info("userId : {} / password : {}", userId, password);
 
@@ -515,5 +519,37 @@ public class UserinfoController {
 
         return "user/newPasswordResult";
     }
+
+    @GetMapping("/myinfo")
+    public String myInfo(HttpSession session, Model model) throws Exception {
+
+        String userId = (String) session.getAttribute("SS_USER_ID");
+
+        if (userId == null) {
+            return "redirect:/user/login";
+        }
+
+        UserinfoDTO pDTO = new UserinfoDTO(); // ✅ 파일명 맞춤
+        pDTO.setUserId(userId);
+
+        UserinfoDTO rDTO = UserinfoService.getUserInfo(pDTO); // ✅ 필드 주입된 서비스 사용
+
+        model.addAttribute("rDTO", rDTO);
+        return "user/myinfo";
+    }
+
+    @GetMapping("/logout")
+    public String logoutGet(HttpSession session) {
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
+    }
+
+    @PostMapping("/logout")
+    public String logoutPost(HttpSession session) {
+        return logoutGet(session); // GET 로직 재사용
+    }
+
 
 }

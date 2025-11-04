@@ -46,17 +46,19 @@
 
 <!-- Kakao Map API -->
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=84a966ed78c5ee7334ec7decce7e8358&libraries=services"></script>
+
 <script>
+    // ✅ 지도 초기 설정
     var mapContainer = document.getElementById('map');
     var mapOption = {
-        center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 서울 시청 좌표
+        center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 서울시청 좌표
         level: 5
     };
-
     var map = new kakao.maps.Map(mapContainer, mapOption);
     var geocoder = new kakao.maps.services.Geocoder();
     var marker = new kakao.maps.Marker({ map: map });
 
+    // ✅ 주소 검색 기능
     document.getElementById("searchBtn").addEventListener("click", function () {
         var address = document.getElementById("address").value;
         if (!address) {
@@ -67,7 +69,6 @@
         geocoder.addressSearch(address, function(result, status) {
             if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
                 map.setCenter(coords);
                 marker.setPosition(coords);
             } else {
@@ -75,26 +76,47 @@
             }
         });
     });
+
+    // ✅ DB에서 범죄 데이터 불러오기 (추가된 부분)
+    fetch('/map/crime')
+        .then(res => res.json())
+        .then(data => {
+            console.log("범죄 데이터:", data);
+
+            if (data.length === 0) {
+                console.warn("DB에 범죄 데이터가 없습니다. /map/updateCrimeData 먼저 실행하세요.");
+                return;
+            }
+
+            data.forEach(c => {
+                // 좌표 확인
+                if (!c.lat || !c.lng) return;
+
+                // 마커 생성
+                const crimeMarker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(c.lat, c.lng),
+                    map: map
+                });
+
+                // 정보창 생성
+                const infoWindow = new kakao.maps.InfoWindow({
+                    content: `
+                        <div style="padding:5px; text-align:center; width:160px;">
+                            <b>${c.crimeType}</b><br>
+                            ${c.region}<br>
+                            <span style="font-size:12px;color:gray;">${c.description}</span>
+                        </div>`
+                });
+
+                kakao.maps.event.addListener(crimeMarker, 'click', () => {
+                    infoWindow.open(map, crimeMarker);
+                });
+            });
+        })
+        .catch(err => {
+            console.error("데이터 불러오기 실패:", err);
+            alert("범죄 데이터를 불러오는 중 오류가 발생했습니다.");
+        });
 </script>
 </body>
 </html>
-<%--<!DOCTYPE html>--%>
-<%--<html>--%>
-<%--<head>--%>
-<%--    <meta charset="utf-8"/>--%>
-<%--    <title>Kakao 지도 시작하기</title>--%>
-<%--</head>--%>
-<%--<body>--%>
-<%--<div id="map" style="width:500px;height:400px;"></div>--%>
-<%--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=992d0fb37a356d0efb02ee5300812c81"></script>--%>
-<%--<script>--%>
-<%--    var container = document.getElementById('map');--%>
-<%--    var options = {--%>
-<%--        center: new kakao.maps.LatLng(33.450701, 126.570667),--%>
-<%--        level: 3--%>
-<%--    };--%>
-
-<%--    var map = new kakao.maps.Map(container, options);--%>
-<%--</script>--%>
-<%--</body>--%>
-<%--</html>--%>

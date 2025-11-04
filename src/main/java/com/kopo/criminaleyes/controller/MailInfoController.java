@@ -4,6 +4,8 @@ import com.kopo.criminaleyes.dto.MailInfoDTO;
 import com.kopo.criminaleyes.dto.NoticeDTO;
 import com.kopo.criminaleyes.mapper.IMailListMapper;
 import com.kopo.criminaleyes.service.IMailListService;
+import com.kopo.criminaleyes.util.CmmUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,5 +58,39 @@ public class MailInfoController {
         // 함수 처리가 끝나고 보여줄 JSP 파일명
         // webapp/WEB-INF/views/notice/mailList.jsp
         return "notice/mailList";
+    }
+
+    @GetMapping(value = "mailInfo")
+    public String mailInfo(HttpServletRequest request, ModelMap model) throws Exception{
+
+        log.info("{}.mailInfo start!", this.getClass().getName());
+
+        String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PN)
+
+        // 반드시 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
+
+        log.info("nSeq : {}", nSeq);
+
+        // 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
+
+        MailInfoDTO pDTO = new MailInfoDTO();
+        pDTO.setMailId(nSeq);
+
+        // 공지사항 상세정보 가져오기
+        // Java 8부터 제공되는 Optional 활용하여 NPE 처리
+        MailInfoDTO rDTO = Optional.ofNullable(mailListService.selectMailList(pDTO))
+                .orElseGet(MailInfoDTO::new);
+
+        // 조회된 리스트 결과값 넣어주기
+        model.addAttribute("rDTO", rDTO);
+
+        log.info("{}.mailInfo end!", this.getClass().getName());
+
+        // 함수 처리가 끝나고 보여줄 JSP 파일명
+        return "notice/mailInfo";
+
+        /**
+         * 게시판 수정 보기
+         */
     }
 }

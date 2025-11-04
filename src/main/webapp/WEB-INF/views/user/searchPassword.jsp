@@ -49,7 +49,7 @@
 <!-- 메인 컨테이너 -->
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow-sm rounded-4 p-4" style="max-width: 400px; width: 100%;">
-        <h3 class="text-center mb-4">🔑 비밀번호 찾기</h3>
+        <h3 class="text-center mb-4">비밀번호 찾기</h3>
 
         <form id="f">
             <div class="mb-3">

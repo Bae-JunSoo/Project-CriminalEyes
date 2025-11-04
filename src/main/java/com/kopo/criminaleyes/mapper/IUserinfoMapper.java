@@ -30,4 +30,7 @@ public interface IUserinfoMapper {
 
     // 비밀번호 재설정
     int updatePassword(UserinfoDTO pDTO) throws Exception;
+
+    UserinfoDTO getUserInfo(UserinfoDTO pDTO) throws Exception;
+
 }

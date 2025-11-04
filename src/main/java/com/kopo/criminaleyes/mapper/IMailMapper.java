@@ -14,4 +14,5 @@ public interface IMailMapper {
 
     // 기능 3: 특정 메일 1개의 상세 정보 가져오기
     MailDTO getMailDetail(MailDTO pDTO) throws Exception;
+
 }

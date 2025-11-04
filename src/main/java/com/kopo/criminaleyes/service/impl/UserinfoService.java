@@ -195,4 +195,22 @@ public class UserinfoService implements IUserinfoService {
         return success;
     }
 
+    @Override
+    public UserinfoDTO getUserInfo(UserinfoDTO pDTO) throws Exception {
+        // 1) Mapper 호출해서 DB에서 값 조회
+        UserinfoDTO rDTO = userinfoMapper.getUserInfo(pDTO);
+
+        // 2) null 체크 후 복호화
+        if (rDTO != null) {
+            String email = CmmUtil.nvl(rDTO.getEmail());
+            if (!email.isEmpty()) {
+                rDTO.setEmail(EncryptUtil.decAES128CBC(email)); // AES 복호화
+            }
+        }
+
+        return rDTO;
+    }
+
+
+
 }
